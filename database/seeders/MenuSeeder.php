@@ -26,7 +26,7 @@ class MenuSeeder extends Seeder
             Menu::create(['id'=>2,'name'=>'จัดการร้านค้า','is_active'=>'1']);
             Menu::create(['id'=>3,'name'=>'จัดการสินค้า','is_active'=>'1']);
             Menu::create(['id'=>4,'name'=>'จัดการข้อมูลส่วนตัว','is_active'=>'1']);
-            
+            // test git
             DB::commit();
         }catch (Exception $e){
             echo "there's error";
