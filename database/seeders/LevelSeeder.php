@@ -26,6 +26,7 @@ class LevelSeeder extends Seeder
             Level::create(['id'=>1,'name'=>'เจ้าของร้าน']);
             Level::create(['id'=>2,'name'=>'หัวหน้าลูกจ้าง']);
             Level::create(['id'=>3,'name'=>'ลูกจ้าง']);
+            // test git 2
             DB::commit();
         }catch (Exception $e){
             echo "there's error";
