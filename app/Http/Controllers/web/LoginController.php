@@ -9,6 +9,7 @@ use App\Models\Device;
 use Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -25,12 +26,24 @@ class LoginController extends Controller
         }
 
         // $this->loginByDevice();
-
         $employee = Employee::where("mobile",$request->phone_number)->where("password",$request->password)->first();
         if($employee){
-            //dd($employee);
-            $device_token = createDevice($employee->id);
-            return  redirect('/home')->with('token', $device_token);
+            if($employee->is_active == 1 && $employee->level_id != null){
+                Auth::login($employee);
+                if(Auth::check()){
+                    return  redirect('/home');
+                }else{
+                    return back() ;
+                }
+            }else{
+                $validator->errors()->add('field', 'กรุณารอการอนุมัติจากระบบ');
+                if ($validator->errors()->any()) {
+                    return back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+            }
+
         }else{
             $validator->errors()->add('field', 'เบอร์โทรศัพท์ หรือ รหัสผ่าน ผิด');
             if ($validator->errors()->any()) {

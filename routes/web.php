@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
 Route::get('/', 'web\LoginController@index');
 Route::post('/login', 'web\LoginController@login');
 
 Route::get('/register', 'web\RegisterController@index');
 Route::post('/register', 'web\RegisterController@register');
 
-Route::get('/home', 'web\HomeController@index');
+Route::group(['middleware'=>'auth.check'], function(){
+    Route::get('/home', 'web\HomeController@index');
+});
