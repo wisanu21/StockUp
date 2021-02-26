@@ -24,4 +24,7 @@ Route::post('/register', 'web\RegisterController@register');
 
 Route::group(['middleware'=>'auth.check'], function(){
     Route::get('/home', 'web\HomeController@index');
+
+    Route::get('/manage-users', 'web\HomeController@index');
+    Route::get('/logout', 'web\LoginController@logout');
 });

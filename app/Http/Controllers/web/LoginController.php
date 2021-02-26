@@ -66,6 +66,11 @@ class LoginController extends Controller
         return $validator;
     }
 
+    public function logout(){
+        Auth::logout();
+        return  redirect('/');
+    }
+
 }
 
 

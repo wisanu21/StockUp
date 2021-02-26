@@ -22,12 +22,13 @@ class MenuSeeder extends Seeder
             // DB::table('levels')->truncate();
             // DB::raw("INSERT INTO 'level' ('id', 'name') VALUES (0, 'ไม่ได้');");
             // DB::table("level")->create(['id'=>0, 'name'=>'ไม่ได้']);
-            Menu::create(['id'=>1,'name'=>'จัดการพนักงาน','is_active'=>'1']);
-            Menu::create(['id'=>2,'name'=>'จัดการร้านค้า','is_active'=>'1']);
-            Menu::create(['id'=>3,'name'=>'จัดการสินค้า','is_active'=>'1']);
-            Menu::create(['id'=>4,'name'=>'จัดการข้อมูลส่วนตัว','is_active'=>'1']);
-            Menu::create(['id'=>5,'name'=>'จัดการโปรโมชั่น','is_active'=>'1']);
-            Menu::create(['id'=>6,'name'=>'รับ Order','is_active'=>'1']);
+            Menu::create(['id'=>1,'name'=>'จัดการผู้ใช้งานระบบ','is_active'=>'1']);
+            Menu::create(['id'=>2,'name'=>'จัดการพนักงาน','is_active'=>'1']);
+            Menu::create(['id'=>3,'name'=>'จัดการร้านค้า','is_active'=>'1']);
+            Menu::create(['id'=>4,'name'=>'จัดการสินค้า','is_active'=>'1']);
+            Menu::create(['id'=>5,'name'=>'จัดการข้อมูลส่วนตัว','is_active'=>'1']);
+            Menu::create(['id'=>6,'name'=>'จัดการโปรโมชั่น','is_active'=>'1']);
+            Menu::create(['id'=>7,'name'=>'รับ Order','is_active'=>'1']);
             // test git 2
             DB::commit();
         }catch (Exception $e){

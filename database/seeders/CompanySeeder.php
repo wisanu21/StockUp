@@ -19,9 +19,10 @@ class CompanySeeder extends Seeder
 
         try{
             DB::table('companies')->delete();
-            Company::create(['id'=>1,'name'=>'ร้านที่1',"is_active"=>'1',"is_register"=>'1',"path_image"=>"test.png"]);
-            Company::create(['id'=>2,'name'=>'ร้านที่2',"is_active"=>'1',"is_register"=>'1',"path_image"=>"test.png"]);
-            Company::create(['id'=>3,'name'=>'ร้านที่3',"is_active"=>'1',"is_register"=>'1',"path_image"=>"test.png"]);
+            Company::create(['id'=>1,'name'=>'ผู้ดูแลระบบ',"is_active"=>'1',"is_register"=>'0',"path_image"=>"test.png"]);
+            Company::create(['id'=>2,'name'=>'ร้านที่1',"is_active"=>'1',"is_register"=>'1',"path_image"=>"test.png"]);
+            Company::create(['id'=>3,'name'=>'ร้านที่2',"is_active"=>'1',"is_register"=>'1',"path_image"=>"test.png"]);
+            Company::create(['id'=>4,'name'=>'ร้านที่3',"is_active"=>'1',"is_register"=>'1',"path_image"=>"test.png"]);
             // test git 2
             DB::commit();
         }catch (Exception $e){

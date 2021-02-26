@@ -12,12 +12,22 @@
 <hr class="sidebar-divider my-0">
 
 <!-- Nav Item - Dashboard -->
-<li class="nav-item active">
+<!-- <li class="nav-item active">
     <a class="nav-link" href="index.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
-</li>
+</li> -->
 
+@foreach (\Auth::user()->menu_employees as $menu_employee)
+    @if($menu_employee->Menu != null)
+    <li class="nav-item {{\Request::is([$menu_employee->Menu->header_url])?'active':''}}">
+        <a class="nav-link" href="{{url('/'.$menu_employee->Menu->header_url)}}">
+            {!! $menu_employee->Menu->html_icon !!}
+            <span>{{$menu_employee->Menu->name}}</span>
+        </a>
+    </li>
+    @endif
+@endforeach
 <!-- Divider -->
 <hr class="sidebar-divider">
 
