@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEasyNameToEmployeesTable extends Migration
+class AddLevelOnEmployeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AddEasyNameToEmployeesTable extends Migration
     public function up()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->string('easy_name')->nullable()->comment('ชื่อเล่น');
+            $table->unsignedBigInteger('level_id')->nullable()->comment('ระดับ');
+            $table->foreign('level_id')->references('id')->on('levels')->onDelete('cascade');
         });
     }
 
@@ -26,7 +27,7 @@ class AddEasyNameToEmployeesTable extends Migration
     public function down()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->dropColumn('easy_name');
+            $table->dropColumn('level_id');
         });
     }
 }

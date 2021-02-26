@@ -10,6 +10,12 @@ use App\Models\Device;
 use App\Models\Level ;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Response;
+Use DB;
+
 class DashboardController extends Controller
 {
     public function getDataDashboard(Request $request){
@@ -26,4 +32,11 @@ class DashboardController extends Controller
 
         return response()->json(['state'=>'failed']);  
     } 
+
+    public function image(){
+
+        $path = public_path().'/storage/company/1.png';
+        // dd($path);
+        return Response::download($path);        
+    }
 }

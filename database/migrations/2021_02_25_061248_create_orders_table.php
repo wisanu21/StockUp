@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProducts extends Migration
+class CreateOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,19 @@ class CreateProducts extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
             $table->string('name')->comment('ชื่อ');
-            $table->double('price')->comment('ราคา');
-            $table->string('image_path')->comment('ที่อยู่รูป');
-            // $table->integer('num_product')->comment('จำนวนสินค้า');
-            // $table->text('detail')->comment('ข้อมูล');
+            $table->float('price', 8, 2);
+            $table->float('get_money', 8, 2);
+            $table->float('change_money', 8, 2);
             $table->unsignedBigInteger('company_id')->nullable()->comment('บริษัท');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->unsignedBigInteger('adder_id')->nullable()->comment('พนักงานที่เพิ่มสินค้า');
+            $table->unsignedBigInteger('adder_id')->nullable()->comment('เจ้าของอุปกร');
             $table->foreign('adder_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->boolean("is_sell")->comment('ขาย หรือไม่');
+            $table->unsignedBigInteger('promotion_id')->nullable()->comment('โปรโมชั่นที่ใช้ใน order นี้');
+            $table->foreign('promotion_id')->references('id')->on('promotions')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -37,6 +36,6 @@ class CreateProducts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('orders');
     }
 }

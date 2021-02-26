@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LevelSeeder::class,
             MenuSeeder::class,
+            CompanySeeder::class,
             // PostSeeder::class,
             // CommentSeeder::class,
         ]);

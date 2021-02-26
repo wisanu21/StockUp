@@ -25,6 +25,8 @@ Route::post('/log-out', 'API\LoginController@Logout');
 
 Route::post('/get-data-dashboard', 'API\Pages\DashboardController@getDataDashboard');
 
+Route::get('/get-image', 'API\Pages\DashboardController@image');
+
 // Route::get('/test-index', 'API\testController@index');
 // Route::get('/welcome', function () {
 //     // return $request->all();

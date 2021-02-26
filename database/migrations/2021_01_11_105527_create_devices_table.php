@@ -19,6 +19,7 @@ class CreateDevicesTable extends Migration
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->string('os')->comment('ยี่ห้อ');
             $table->string('identifier')->comment('รหัส');
+            $table->string('token')->comment('รหัส');
             $table->timestamps();
         });
     }
