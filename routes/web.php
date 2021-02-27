@@ -27,4 +27,15 @@ Route::group(['middleware'=>'auth.check'], function(){
 
     Route::get('/manage-users', 'web\HomeController@index');
     Route::get('/logout', 'web\LoginController@logout');
+
+
+    Route::group(['prefix' => 'product'], function () {
+        Route::get('/', 'web\ProductController@list');
+        Route::get("/add","web\ProductController@add");
+        Route::post("/add-save","web\ProductController@addSave");
+        Route::get("/detail/{id}","web\ProductController@detail");
+        Route::get("/edit/{id}","web\ProductController@edit");
+        Route::get("/delect/{id}","web\ProductController@delect");
+    });
+
 });
