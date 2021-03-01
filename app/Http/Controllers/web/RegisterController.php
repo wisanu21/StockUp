@@ -61,10 +61,11 @@ class RegisterController extends Controller
         } catch (\Throwable $e) {
             \DB::rollBack();
             \Log::info($e->getMessage() ."\n" . $e->getTraceAsString());
-            return response()->json(['error'=>'error']);
+            // return response()->json(['error'=>'error']);
+            return redirect('/')->with('response', [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => $e->getMessage() ."\n" . $e->getTraceAsString() ] ) ;
         }
         // dd("dfs");
-        return redirect('/')->with('status', 'สมัครสมาชิกสำเร็จ กรุณารอการอนุมัติจากระบบ !');
+        return redirect('/')->with('response', [ "status" => "success" , "title" => "ยินดีด้วย" , "detail" => "สมัครสมาชิกสำเร็จ กรุณารอการอนุมัติจากระบบ !" ] ) ;
     }
 
     public function validatorRegister($request){

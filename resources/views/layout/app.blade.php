@@ -95,6 +95,16 @@
     <script src="js/demo/chart-pie-demo.js"></script> -->
     
     @yield('script')
+
+    @if (session('response'))
+        <script>
+            Swal.fire(
+                "{{ session('response')['title'] }}",
+                "{{ session('response')['detail'] }}",
+                "{{ session('response')['status'] }}"
+            )
+        </script>
+    @endif
 </body>
 
 </html>

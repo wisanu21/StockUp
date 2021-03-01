@@ -22,4 +22,12 @@ function saveImage($request , $folder , $file_name){
     }
 }
 
+function showIconStatus_y_or_n($str_status){
+    if($str_status == "y") {
+        return '<i class="fas fa-check-circle"style="color: cadetblue;"></i>' ;
+    }
+    if($str_status == "n") {
+        return '<i class="fas fa-times-circle" style="color: coral;"></i>' ;
+    }
+}
 ?>

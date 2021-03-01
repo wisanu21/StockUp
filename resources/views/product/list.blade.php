@@ -31,15 +31,15 @@
                                             <td>{{$product['price']}}</td>
                                             <td>
                                             @if($product['is_sell'])
-                                                ขาย
+                                                {!! showIconStatus_y_or_n("y") !!} ขาย
                                             @else
-                                                ระงับการขาย
+                                                {!! showIconStatus_y_or_n("n") !!} ระงับการขาย
                                             @endif    
                                             </td>
                                             <td>
-                                                <a href="{{url( 'product/detail/'.$product['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm"><i class="fas fa-search"></i></a>
-                                                <a href="{{url( 'product/edit/'.$product['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm"><i class="fas fa-edit"></i></a>
-                                                <a href="{{url( 'product/delect/'.$product['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm"><i class="fas fa-trash"></i></a>
+                                                <a href="{{url( 'product/detail/'.$product['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-search"></i></a>
+                                                <a href="{{url( 'product/edit/'.$product['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-edit"></i></a>
+                                                <a class="btn btn-primary btn-primary-blue btn-sm " onclick="Delete({{$product['id']}})" style="margin-bottom: 1px;"><i class="fas fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -59,5 +59,23 @@
     $(document).ready( function () {
         $('#table-list').DataTable();
     } );
+    function Delete(id) {
+        // alert( "Handler for .click() called." );
+        Swal.fire({
+            title: 'คุณแน่ใจที่จะลบใช่ไหม?',
+            text: "คุณจะไม่สามารถเปลี่ยนกลับได้!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่ต้องการลบ',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.replace("{{url( 'product/delete/')}}"+"/"+id);
+            }   
+        })
+    };
+
     </script>
 @endsection

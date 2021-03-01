@@ -1,6 +1,5 @@
 @extends('layout.app')
 @section('content')
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.4/css/fileinput.min.css" rel="stylesheet" type="text/css">
     <div class="container">
         <div class = "row justify-content-center">
@@ -39,7 +38,7 @@
                                 </div>
 
                                 {!! showError('field',$errors) !!}
-                                <input type="submit"  class="btn btn-primary btn-user btn-block" value="บันทึก">
+                                <a class="btn btn-primary btn-user btn-block" href="{{url('/product')}}" >กลับ</a>
                             {!! Form::close() !!}
                     </div>
                 </div>
@@ -64,10 +63,7 @@
             showBrowse: false,
             initialPreviewShowDelete: false,
             browseOnZoneClick: false ,
-            initialPreview: [
-                // IMAGE RAW MARKUP
-                '<img src="'+ "{{url('/storage/product/'.$product->image_path)}}" +'" class="kv-preview-data file-preview-image">',
-            ],
+            initialPreview: '<img src="'+ "{{url('/storage/product/'.$product->image_path)}}" +'" class="kv-preview-data file-preview-image">',
             
         });
     </script>

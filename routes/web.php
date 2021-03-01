@@ -35,7 +35,18 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::post("/add-save","web\ProductController@addSave");
         Route::get("/detail/{id}","web\ProductController@detail");
         Route::get("/edit/{id}","web\ProductController@edit");
-        Route::get("/delect/{id}","web\ProductController@delect");
+        Route::post("/edit-save","web\ProductController@editSave");
+        Route::get("/delete/{id}","web\ProductController@delete");
+    });
+
+    Route::group(['prefix' => 'promotion'], function () {
+        Route::get('/', 'web\PromotionController@list');
+        Route::get("/add","web\PromotionController@add");
+        Route::post("/add-save","web\PromotionController@addSave");
+        Route::get("/detail/{id}","web\PromotionController@detail");
+        Route::get("/edit/{id}","web\PromotionController@edit");
+        Route::post("/edit-save","web\PromotionController@editSave");
+        Route::get("/delete/{id}","web\PromotionController@delete");
     });
 
 });

@@ -78,7 +78,7 @@
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
                                     </div> -->
                                     <div class="text-center">
-                                        <a class="small" href="{{url('/register')}}">สมัครสมาชิก{{ session('status') }}</a>
+                                        <a class="small" href="{{url('/register')}}">สมัครสมาชิก</a>
                                     </div>
                                 </div>
                             </div>
@@ -103,12 +103,12 @@
     <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.js"></script>
 
-    @if (session('status'))
+    @if (session('response'))
         <script>
             Swal.fire(
-                'ยินดีด้วย',
-                "{{ session('status') }}",
-                'success'
+                "{{ session('response')['title'] }}",
+                "{{ session('response')['detail'] }}",
+                "{{ session('response')['status'] }}"
             )
         </script>
     @endif

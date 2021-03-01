@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-12">
-                                        <?php $is_sell = [""=>"-- กรุณาเลือกสถานะการขาย --" , "0"=>"ระงับการขาย" , "1"=>"ทำการขาย"]; ?>
+                                        <?php $is_sell = [""=>"-- กรุณาเลือกสถานะการขาย --" , "1"=>"ทำการขาย" , "0"=>"ระงับการขาย"]; ?>
                                         {!! Form::select('is_sell', $is_sell, old('is_sell'), ['class'=> 'form-control form-control-user']) !!}
                                         {!! showError('is_sell',$errors) !!}
                                     </div>
