@@ -49,4 +49,8 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::get("/delete/{id}","web\PromotionController@delete");
     });
 
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/', 'web\OrderController@list');
+        Route::get('/create-order/{promotion_id}', 'web\OrderController@createOrder');
+    });
 });
