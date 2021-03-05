@@ -71,6 +71,28 @@ class LoginController extends Controller
         return  redirect('/');
     }
 
+    public function loginRestrictedArea(Request $request){
+        \DB::beginTransaction();
+        try {
+            if(isset($request->data["user_id"]) && isset($request->data["password"])){
+                if(Employee::where("id",$request->data["user_id"])->where("password",$request->data["password"])->first() != null){
+                    return  [ "status" => "success" , "url" => url("/manage-users") ] ; 
+                }else{
+                    return  [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => "ไม่ได้แดกกูหรอก" ] ; 
+                }
+                
+            }else{
+                return  [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => "ไม่ได้แดกกูหรอก" ] ; 
+            }
+            \Log::info('register Employee ',$request->input());
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            \Log::info($e->getMessage() ."\n" . $e->getTraceAsString());
+            // return response()->json(['error'=>'error']);
+            return [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => "ไม่ได้แดกกูหรอก" ] ;
+        }
+    }
 }
 
 

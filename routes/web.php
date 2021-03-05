@@ -21,13 +21,19 @@ Route::post('/login', 'web\LoginController@login');
 
 Route::get('/register', 'web\RegisterController@index');
 Route::post('/register', 'web\RegisterController@register');
-
 Route::group(['middleware'=>'auth.check'], function(){
+    Route::post('/login-restricted-area', 'web\LoginController@loginRestrictedArea');
     Route::get('/home', 'web\HomeController@index');
-
-    Route::get('/manage-users', 'web\HomeController@index');
     Route::get('/logout', 'web\LoginController@logout');
 
+    Route::group(['prefix' => 'manage-users'], function () {
+        Route::get('/', 'web\ManageUsersController@list');
+        // Route::get("/add","web\ProductController@add");
+        // Route::post("/add-save","web\ProductController@addSave");
+        Route::get("/edit/{id}","web\ManageUsersController@edit");
+        Route::post("/edit-save","web\ManageUsersController@editSave");
+        Route::get("/delete/{id}","web\ManageUsersController@delete");
+    });
 
     Route::group(['prefix' => 'product'], function () {
         Route::get('/', 'web\ProductController@list');
@@ -52,5 +58,6 @@ Route::group(['middleware'=>'auth.check'], function(){
     Route::group(['prefix' => 'order'], function () {
         Route::get('/', 'web\OrderController@list');
         Route::get('/create-order/{promotion_id}', 'web\OrderController@createOrder');
+        Route::post("/submit-order","web\OrderController@submitOrder");
     });
 });

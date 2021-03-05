@@ -68,7 +68,7 @@
             <div class="col-xl-4 col-lg-5 col-sm-12">
                 <div class="card shadow mb-12">
                     <div class="card-header py-2">
-                        <h6 class="m-0 font-weight-bold text-secondary"> <i class="fas fa-concierge-bell"></i> รายการที่เลือก </h6>
+                        <h6 class="m-0 font-weight-bold text-secondary"> <i class="fab fa-shopify"></i> รายการที่เลือก </h6>
                     </div>
                     <div class="card-body" id = "card-list-product">
 

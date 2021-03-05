@@ -1,0 +1,54 @@
+/* * {
+    font-size: 12px;
+    font-family: 'Times New Roman';
+} */
+
+td.slip-td,
+th.slip-th,
+tr.slip-tr,
+table.slip-table {
+    border-top: 1px solid black;
+    border-collapse: collapse;
+}
+
+td.slip-description,
+th.slip-description {
+    width: 75px;
+    max-width: 75px;
+}
+
+td.slip-quantity,
+th.slip-quantity {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+td.slip-price,
+th.slip-price {
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+
+.slip-centered {
+    text-align: center;
+    align-content: center;
+}
+
+.slip-ticket {
+    width: 155px;
+    max-width: 155px;
+}
+
+.slip-img {
+    max-width: inherit;
+    width: inherit;
+}
+
+@media print {
+    .hidden-print,
+    .hidden-print * {
+        display: none !important;
+    }
+}

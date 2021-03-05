@@ -19,25 +19,75 @@
 </li> -->
 
 @foreach (\Auth::user()->menu_employees as $menu_employee)
-    @if($menu_employee->Menu != null)
+    @if($menu_employee->Menu != null && $menu_employee->Menu->id != 1 )
     <li class="nav-item {{\Request::is([$menu_employee->Menu->header_url])?'active':''}}">
+        
         <a class="nav-link" href="{{url('/'.$menu_employee->Menu->header_url)}}">
             {!! $menu_employee->Menu->html_icon !!}
             <span>{{$menu_employee->Menu->name}}</span>
         </a>
     </li>
     @endif
+    @if($menu_employee->Menu != null && \Auth::user()->Level->id == 1 && $menu_employee->Menu->id == 1 )
+    <li class="nav-item {{\Request::is([$menu_employee->Menu->header_url])?'active':''}}">
+        
+        <a class="nav-link" id = "bt-admin" onclick="confirmAdmin()">
+            {!! $menu_employee->Menu->html_icon !!}
+            <span>{{$menu_employee->Menu->name}}</span>
+        </a>
+    </li>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        function confirmAdmin(){
+            (async () => {
+                const { value: password } = await Swal.fire({
+                    title: 'เขตหวงห้าม!',
+                    text: "กรุณาใส่รหัสผ่านเพื่อความปลอดภัย",
+                    icon: 'warning',
+                    input: 'password',
+                    inputPlaceholder: 'กรุณากรอกรหัสผ่าน...',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'เข้าสู่เขตหวงห้าม',
+                    cancelButtonText: 'ยกเลิก'
+                })
+                if (password) {
+                    var data_form = { "user_id" : "{{\Auth::user()->id}}" , "password" : `${password}` } ;
+                    axios.post('/login-restricted-area', {data: data_form})
+                    .then((response) => {
+                        response.data.status
+                        if(response.data.status == "success"){
+                            window.location.href = response.data.url;
+                        }else{
+                            Swal.fire(
+                                response.data.title,
+                                response.data.detail,
+                                response.data.status
+                            )
+                        }
+                    })
+                }
+                
+
+            })()
+        }
+    </script>
+    @endif
 @endforeach
+
+
+
 <!-- Divider -->
-<hr class="sidebar-divider">
+<!-- <hr class="sidebar-divider"> -->
 
 <!-- Heading -->
-<div class="sidebar-heading">
+<!-- <div class="sidebar-heading">
     Interface
-</div>
+</div> -->
 
 <!-- Nav Item - Pages Collapse Menu -->
-<li class="nav-item">
+<!-- <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
         aria-expanded="true" aria-controls="collapseTwo">
         <i class="fas fa-fw fa-cog"></i>
@@ -50,10 +100,10 @@
             <a class="collapse-item" href="cards.html">Cards</a>
         </div>
     </div>
-</li>
+</li> -->
 
 <!-- Nav Item - Utilities Collapse Menu -->
-<li class="nav-item">
+<!-- <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
         aria-expanded="true" aria-controls="collapseUtilities">
         <i class="fas fa-fw fa-wrench"></i>
@@ -69,18 +119,18 @@
             <a class="collapse-item" href="utilities-other.html">Other</a>
         </div>
     </div>
-</li>
+</li> -->
 
 <!-- Divider -->
-<hr class="sidebar-divider">
+<!-- <hr class="sidebar-divider"> -->
 
 <!-- Heading -->
-<div class="sidebar-heading">
+<!-- <div class="sidebar-heading">
     Addons
-</div>
+</div> -->
 
 <!-- Nav Item - Pages Collapse Menu -->
-<li class="nav-item">
+<!-- <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
         aria-expanded="true" aria-controls="collapsePages">
         <i class="fas fa-fw fa-folder"></i>
@@ -98,39 +148,39 @@
             <a class="collapse-item" href="blank.html">Blank Page</a>
         </div>
     </div>
-</li>
+</li> -->
 
 <!-- Nav Item - Charts -->
-<li class="nav-item">
+<!-- <li class="nav-item">
     <a class="nav-link" href="charts.html">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Charts</span></a>
-</li>
+</li> -->
 
 <!-- Nav Item - Tables -->
-<li class="nav-item">
+<!-- <li class="nav-item">
     <a class="nav-link" href="tables.html">
         <i class="fas fa-fw fa-table"></i>
         <span>Tables</span></a>
-</li>
+</li> -->
 
 <!-- Divider -->
-<hr class="sidebar-divider d-none d-md-block">
+<!-- <hr class="sidebar-divider d-none d-md-block"> -->
 
 <!-- Sidebar Toggler (Sidebar) -->
-<div class="text-center d-none d-md-inline">
+<!-- <div class="text-center d-none d-md-inline">
     <button class="rounded-circle border-0" id="sidebarToggle"></button>
-</div>
+</div> -->
 
 <!-- Sidebar Message -->
-<div class="sidebar-card">
+<!-- <div class="sidebar-card">
     <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="">
     <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
     <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
 </div>
-
-</ul>
-
+-->
+</ul> 
+<!-- 
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -148,4 +198,4 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->

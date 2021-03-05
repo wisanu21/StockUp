@@ -4,8 +4,10 @@ namespace App\Traits;
 use App\Models\MenuEmployee;
 use App\Models\Level;
 use App\Models\Company;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasEmployeeAttribute {
+    use SoftDeletes;
     public function getMenuEmployeesAttribute()
     {
         return MenuEmployee::where("employee_id", $this->id)->get();
