@@ -48,10 +48,13 @@
                                                         width: inherit;">
                                                     </div>
                                                     <div>
-                                                        <div class="centered"style="width: 100%;background: #362510;opacity: 0.75;">
-                                                            <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                                        <div class="centered"style="width: 100%;background: #362510;">
+                                                            <div class="text-xs font-weight-bold text-uppercase mb-1" style="opacity: 0.75;">
                                                                 {{$product->name}}</div>
-                                                            <div class="h6 mb-0 font-weight-bold ">{{$product->price}}  บาท</div>
+                                                            <div class="h6 mb-0 font-weight-bold " style="opacity: 0.75;">{{$product->price}}  บาท</div>
+                                                            @if( $product->is_stock != "0" && $product->Stock != null  )
+                                                                <div class="h6 mb-0 font-weight-bold " style="opacity: 0.55;">สินค้าในสต๊อก : {{$product->Stock->number}}  ชิ้น</div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

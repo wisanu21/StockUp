@@ -4,14 +4,14 @@
     <link href="//cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
     <div class="container">
         <div class = "row justify-content-center">
-            <div class="col-xl-12 col-lg-12 col-sm-12">
+            <div class="col-xl-10 col-lg-10 col-sm-12">
                 <div class="card shadow mb-3">
                     <div class="card-header py-2">
                         <h6 class="m-0 font-weight-bold text-secondary"> {!! $menu->html_icon !!}  {!! $menu->name !!} </h6>
                     </div>
                     <div class="card-body">
                         <div class = "text-right" >
-                            <a href="{{url('/product/add')}}" ><i class="fas fa-plus"></i> เพิ่มสินค้า</a>
+                            <a href="{{url('/manage-stock/add')}}" ><i class="fas fa-plus"></i> เพิ่มของในสต๊อก</a>
                         </div>
 
                         <div class="text-center table-responsive">
@@ -20,21 +20,19 @@
                                 <tr>
                                     <th></th>
                                     <th>ชื่อ</th>
-                                    <th>ราคา</th>
-                                    <th>สถานะการขาย</th>
-                                    <th>สถานะการตัดสต๊อก</th>
                                     <th>จำนวนในสต๊อก</th>
+                                    <th>สถานะการตัดสต๊อกกับสินค้า</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($products as $product)
+                                    @foreach ($stocks as $stock)
                                         <tr>
                                             <td>
                                                 <div style="
                                                     padding-top: 50%;
                                                     padding-bottom: 50%;
-                                                    background: url({{url('/storage/product/'.$product->image_path)}});
+                                                    background: url({{url('/storage/stock/'.$stock->image_path)}});
                                                     background-repeat: no-repeat;
                                                     background-size: contain;
                                                     background-position:center;
@@ -42,33 +40,19 @@
                                                     width: inherit;">
                                                 </div>
                                             </td>
-                                            <td>{{$product['name']}}</td>
-                                            <td>{{$product['price']}}</td>
+                                            <td>{{$stock['name']}}</td>
+                                            <td>{{$stock['number']}}</td>
                                             <td>
-                                            @if($product['is_sell'])
-                                                {!! showIconStatus_y_or_n("y") !!} ขาย
+                                            @if($stock['product_id'])
+                                                {!! showIconStatus_y_or_n("y") !!} มีการตัดสต๊อกกับสินค้า
                                             @else
-                                                {!! showIconStatus_y_or_n("n") !!} ระงับการขาย
+                                                {!! showIconStatus_y_or_n("n") !!} ไม่มีการตัดสต๊อกกับสินค้า
                                             @endif    
                                             </td>
                                             <td>
-                                            @if($product["is_stock"] == "1")
-                                                {!! showIconStatus_y_or_n("y") !!} ทำการตัดสต๊อก
-                                            @else
-                                                {!! showIconStatus_y_or_n("n") !!} ไม่ทำการตัดสต๊อก
-                                            @endif    
-                                            </td>
-                                            <td>
-                                                @if($product["is_stock"] == "1")
-                                                    {{ $product->Stock->number }}
-                                                @else
-                                                    -
-                                                @endif    
-                                            </td>
-                                            <td>
-                                                <a href="{{url( 'product/detail/'.$product['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-search"></i></a>
-                                                <a href="{{url( 'product/edit/'.$product['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-edit"></i></a>
-                                                <a class="btn btn-primary btn-primary-blue btn-sm " onclick="Delete({{$product['id']}})" style="margin-bottom: 1px;"><i class="fas fa-trash"></i></a>
+                                                <a href="{{url( 'manage-stock/detail/'.$stock['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-search"></i></a>
+                                                <a href="{{url( 'manage-stock/edit/'.$stock['id'] )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-edit"></i></a>
+                                                <a class="btn btn-primary btn-primary-blue btn-sm " onclick="Delete({{$stock['id']}})" style="margin-bottom: 1px;"><i class="fas fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -101,7 +85,7 @@
             cancelButtonText: 'ยกเลิก'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.replace("{{url( 'product/delete/')}}"+"/"+id);
+                window.location.replace("{{url( 'manage-stock/delete/')}}"+"/"+id);
             }   
         })
     };

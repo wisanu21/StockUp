@@ -12,7 +12,7 @@ use Auth ;
 class PromotionController extends Controller
 {
     public function list(){
-        $promotions =  Promotion::all();
+        $promotions =  Promotion::where("company_id" , Auth::user()->company_id )->get();
         $menu = Menu::where("id",6)->first();
         return view('promotion.list', compact('promotions','menu'));
     }

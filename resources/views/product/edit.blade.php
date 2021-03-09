@@ -36,7 +36,27 @@
                                     {!! showError('image',$errors) !!}
                                 </div>
                             </div>
-
+                            <hr class="sidebar-divider my-0">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                <?php $is_stocks = [""=>"-- กรุณาเลือกสถานะตัดสต๊อก --" , "1"=>"ทำการตัดสต๊อก" , "0"=>"ไม่ทำการตัดสต๊อก"]; ?>
+                                    {!! Form::select('is_stock', $is_stocks, old('is_stock',$product->is_stock), ['class'=> 'form-control form-control-user is_stock']) !!}
+                                    {!! showError('is_stock',$errors) !!}
+                                </div>
+                            </div>
+                            <?php 
+                            if($product->stock != null){
+                                $number = $product->stock->number ; 
+                            }else{
+                                $number = null ;
+                            }
+                            ?>
+                            <div class="form-group row div_inventory">
+                                <div class="col-sm-12">
+                                    {!! Form::number('number',old('number',$number),['class'=> 'form-control form-control-user', 'placeholder'=>'จำนวนสินค้า']) !!}
+                                    {!! showError('number',$errors) !!}
+                                </div>
+                            </div>
                             {!! showError('field',$errors) !!}
                             <input type="submit"  class="btn btn-primary btn-user btn-block" value="บันทึก">
                         {!! Form::close() !!}
@@ -66,5 +86,16 @@
             initialPreview: '<img src="'+ "{{url('/storage/product/'.$product->image_path)}}" +'" class="kv-preview-data file-preview-image">',
             
         });
+        onChange();
+        $(".is_stock").change(function() {
+            onChange();
+        });
+        function onChange(){
+            if($(".is_stock").val() == "1"){
+                $(".div_inventory").show();
+            }else{
+                $(".div_inventory").hide();
+            }
+        }
     </script>
 @endsection

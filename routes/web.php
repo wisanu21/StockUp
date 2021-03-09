@@ -60,4 +60,27 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::get('/create-order/{promotion_id}', 'web\OrderController@createOrder');
         Route::post("/submit-order","web\OrderController@submitOrder");
     });
+
+    
+    Route::group(['prefix' => 'manage-stock'], function () {
+        Route::get('/', 'web\StockController@list');
+        Route::get("/add","web\StockController@add");
+        Route::post("/add-save","web\StockController@addSave");
+        Route::get("/detail/{id}","web\StockController@detail");
+        Route::get("/edit/{id}","web\StockController@edit");
+        Route::post("/edit-save","web\StockController@editSave");
+        Route::get("/delete/{id}","web\StockController@delete");
+        // Route::get('/create-order/{promotion_id}', 'web\OrderController@createOrder');
+        // Route::post("/submit-order","web\OrderController@submitOrder");
+    });
+
+    Route::group(['prefix' => 'employee'], function () {
+        // Route::get('/', 'web\EmployeeController@list');
+        // Route::get("/add","web\ProductController@add");
+        // Route::post("/add-save","web\ProductController@addSave");
+        // Route::get("/detail/{id}","web\ProductController@detail");
+        // Route::get("/edit/{id}","web\ProductController@edit");
+        // Route::post("/edit-save","web\ProductController@editSave");
+        // Route::get("/delete/{id}","web\ProductController@delete");
+    });
 });

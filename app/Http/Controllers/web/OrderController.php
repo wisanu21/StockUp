@@ -12,6 +12,7 @@ use Auth ;
 use App\Models\Promotion ;
 use App\Models\Order ;
 use App\Models\OrderProduct ;
+use App\Models\Stock ;
 
 class OrderController extends Controller
 {
@@ -34,7 +35,6 @@ class OrderController extends Controller
     }
 
     public function submitOrder(Request $request){
-        // dd($request->items);
         if($request->items){
             $sum_price = 0 ; 
             foreach ($request->items["products"] as $key => $product) {
@@ -68,6 +68,7 @@ class OrderController extends Controller
     }
     
     public function saveOrder($request ,$sum_price ,$num_promotion){
+        $is_cut_stock_by_product_error = "success" ;
         \DB::beginTransaction();
         try {
             $order = new Order();
@@ -89,18 +90,48 @@ class OrderController extends Controller
                 $order_product->num_product = $product["number"]; 
                 $order_product->price = $product["price"]; 
                 $order_product->save();
+                if($this->cutStockByProduct($product["id"],$product["number"]) == "error"){
+                    $is_cut_stock_by_product_error = "error" ;
+                }
                 \Log::info('save order_product '.$order_product->id);
             }
             $order["products"] = $request->items["products"] ;
-            \DB::commit();
-
-            return [ "status" => "success" , "detail" => $order ]  ;
+            if($is_cut_stock_by_product_error == "success"){
+                \DB::commit();
+                return [ "status" => "success" , "detail" => $order ]  ;
+            }else{
+                \Log::info('$is_cut_stock_by_product_error == "error" ');
+                \DB::rollBack();
+                return [ "status" => "error"]  ;
+            }
+            
         } catch (\Throwable $e) {
             \DB::rollBack();
             \Log::info($e->getMessage() ."\n" . $e->getTraceAsString());
             // return "error" ;
             return [ "status" => "error"]  ;
 
+        }
+    }
+
+    public function cutStockByProduct($product_id , $product_number){
+        // dd(Product::where("id",$product_id)->first());
+        $product = Product::where("id",$product_id)->first();
+        if($product != null){
+            if($product->is_stock == "1" ){
+                $stock = Stock::where("product_id",$product->id)->first();
+                if($stock != null){
+                    $number = $stock->number - $product_number ;
+                    if($number >= 0){
+                        $stock->number = $number ;
+                        $stock->save();
+                        return "success" ;
+                    }else{
+                        return "error" ;
+                    }
+                    
+                }
+            }
         }
     }
 }

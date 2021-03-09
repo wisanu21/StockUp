@@ -9,12 +9,13 @@ use App\Models\Menu;
 use App\Models\Company ;
 use Validator;
 use Auth ;
+use App\Models\Stock ;
 
 class ProductController extends Controller
 {
     // const $num_menu = 4 ;
     public function list(){
-        $products =  Product::all();
+        $products =  Product::where("company_id" , Auth::user()->company_id )->get();
         $menu = Menu::where("id",4)->first();
         return view('product.list', compact('products','menu'));
     }
@@ -25,6 +26,7 @@ class ProductController extends Controller
     }
 
     public function addSave(Request $request){
+        
         $validator = $this->validatorAddSave($request);
         if ($validator->errors()->any()) {
             return back()
@@ -40,6 +42,7 @@ class ProductController extends Controller
             $product->is_sell = $request->is_sell ;
             $product->company_id = Auth::user()->company_id ;
             $product->adder_id = Auth::user()->id ;
+            $product->is_stock = $request->is_stock ;
 
             switch ($request->image->getMimeType()) {
                 case "image/jpeg":
@@ -56,7 +59,10 @@ class ProductController extends Controller
             $product->save() ;
             
             saveImage($request,"/public/product/",$product->image_path);
-
+            if($product->is_stock == "1"){
+                // addSave
+                (new StockController())->addSaveByProduct($request ,$product->id);
+            }
             \Log::info('add Save product :',$request->input());
             \DB::commit();
         } catch (\Throwable $e) {
@@ -76,18 +82,31 @@ class ProductController extends Controller
             'price' => 'required',
             'is_sell' => 'required',
             'image' => 'required|mimes:jpg,png',
+            'is_stock' => 'required',
         ], [
             'name.required' => 'กรุณากรอกชื่อสินค้า',
             'price.required' => 'กรุณากรอกราคาสินค้า',
             'is_sell.required' => 'กรุณาเลือกสถานะสินค้า',
             'image.required' => "กรุณาเลือกรูปภาพ",
             'image.mimes' => "กรุณาเลือกรูปภาพที่มีสกุลดังนี้ jpg,bmp,png",
+            "is_stock.required" => 'กรุณาเลือกสถานะการตัดสต๊อก',
             // 'image.size' => "กรุณาเลือกรูปภาพที่มีขนาดไม่เกิน 512 kilobytes"
         ]);
+
+        if ($validator->errors()->first('is_stock') == "" ) {
+            if($request->is_stock == "1"){
+                if($request->number == null){
+                    // dd("sdsd");
+                    $validator->errors()->add('number', 'กรุณากรอกจำนวนสินค้าเริ่มต้นในสต๊อก!');
+                }   
+            }
+        }
+
         return $validator;
     }
 
     public function edit($id){
+        
         $product = Product::where("id",$id)->first();
         return view("product.edit", compact('product'));
     }
@@ -108,6 +127,7 @@ class ProductController extends Controller
             $product->is_sell = $request->is_sell ;
             $product->company_id = Auth::user()->company_id ;
             $product->adder_id = Auth::user()->id ;
+            $product->is_stock = $request->is_stock ;
             if($request->hasFile("image")){
                 switch ($request->image->getMimeType()) {
                     case "image/jpeg":
@@ -125,6 +145,7 @@ class ProductController extends Controller
             }else{
                 $product->save() ;
             }
+            (new StockController())->editSaveByProduct($request ,$product->id);
 
             \Log::info('edit Save product :',$request->input());
             \DB::commit();
@@ -145,14 +166,26 @@ class ProductController extends Controller
             'price' => 'required',
             'is_sell' => 'required',
             'image' => 'mimes:jpg,png',
+            'is_stock' => 'required',
         ], [
             'name.required' => 'กรุณากรอกชื่อสินค้า',
             'price.required' => 'กรุณากรอกราคาสินค้า',
             'is_sell.required' => 'กรุณาเลือกสถานะสินค้า',
             // 'image.required' => "กรุณาเลือกรูปภาพ",
             'image.mimes' => "กรุณาเลือกรูปภาพที่มีสกุลดังนี้ jpg,bmp,png",
+            "is_stock.required" => 'กรุณาเลือกสถานะการตัดสต๊อก',
             // 'image.size' => "กรุณาเลือกรูปภาพที่มีขนาดไม่เกิน 512 kilobytes"
         ]);
+
+        if ($validator->errors()->first('is_stock') == "" ) {
+            if($request->is_stock == "1"){
+                if($request->number == null){
+                    // dd("sdsd");
+                    $validator->errors()->add('number', 'กรุณากรอกจำนวนสินค้าเริ่มต้นในสต๊อก!');
+                }   
+            }
+        }
+
         return $validator;
     }
 
@@ -164,8 +197,13 @@ class ProductController extends Controller
     public function delete($id){
         \DB::beginTransaction();
         try {
+            $product = Product::where("id",$id)->first();
+            $product->is_stock = "0" ;
+            $product->save();
             Product::where("id",$id)->delete();
             \Log::info('delete id product : '.$id);
+            Stock::where("product_id",$id)->delete();
+            \Log::info('delete Stock by id product : '.$id);
             \DB::commit();
         } catch (\Throwable $e) {
             \DB::rollBack();
