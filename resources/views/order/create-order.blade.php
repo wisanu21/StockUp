@@ -127,6 +127,7 @@
     }
     
     function backPage(){
+        localStorage.setItem('list_products', []);
         window.location.href = "{{url('order')}}";
     }
 
@@ -221,7 +222,7 @@
         '</div>'
         $('#div-show-get-price').html(slip_HTML);
         // JSON.parse(localStorage.getItem('list_products'));
-        localStorage.setItem('list_products', []);
+        // localStorage.setItem('list_products', []);
     }
 
     function printSlip(){
