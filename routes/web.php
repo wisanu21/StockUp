@@ -33,6 +33,7 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::get("/edit/{id}","web\ManageUsersController@edit");
         Route::post("/edit-save","web\ManageUsersController@editSave");
         Route::get("/delete/{id}","web\ManageUsersController@delete");
+        Route::post("/change-password","web\ManageUsersController@changePassword");
     });
 
     Route::group(['prefix' => 'product'], function () {

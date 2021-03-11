@@ -102,6 +102,9 @@
     
     function setListProductsByLocalStorage(){
         // console.log(JSON.parse(localStorage.getItem('list_products')));
+        if( JSON.parse(localStorage.getItem('list_products')) == null ){
+            localStorage.setItem('list_products', JSON.stringify(list_products));
+        } 
         list_products = JSON.parse(localStorage.getItem('list_products'));
     }
 

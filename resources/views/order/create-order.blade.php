@@ -183,7 +183,7 @@
         slip_HTML = "<div class = 'row justify-content-center'>"+
             "<div id = 'print-slip-JS' class ='slip-ticket' >"+
                 "<style>"+
-                    ".slip-ticket { font-size: 10px; font-family: 'Times New Roman'; } td.slip-td, th.slip-th, tr.slip-tr, table.slip-table { border-top: 1px solid black; border-collapse: collapse; } td.slip-description, th.slip-description { width: 75px; max-width: 75px; } td.slip-quantity, th.slip-quantity { width: 40px; max-width: 40px; word-break: break-all; } td.slip-price, th.slip-price { width: 40px; max-width: 40px; word-break: break-all; } .slip-centered { text-align: center; align-content: center; } .slip-ticket { width: 155px; max-width: 155px; } .slip-img { max-width: inherit; width: inherit; } @media print { .hidden-print, .hidden-print * { display: none !important; } }"+
+                    ".slip-ticket { font-size: 8px; font-family: 'Times New Roman'; } td.slip-td, th.slip-th, tr.slip-tr, table.slip-table { border-top: 1px solid black; border-collapse: collapse; } td.slip-description, th.slip-description { width: 75px; max-width: 75px; } td.slip-quantity, th.slip-quantity { width: 40px; max-width: 40px; word-break: break-all; } td.slip-price, th.slip-price { width: 40px; max-width: 40px; word-break: break-all; } .slip-centered { text-align: center; align-content: center; } .slip-ticket { width: 155px; max-width: 155px; } .slip-img { max-width: inherit; width: inherit; } @media print { .hidden-print, .hidden-print * { display: none !important; } }"+
                 "</style>"+
                 // '<link href="'+'{{asset("css/print-slip.css")}}'+'" rel="stylesheet" type="text/css">'+
                 '<img src="'+"{{url('/storage/company/'.\Auth::user()->Company->path_image)}}"+'" alt="Logo" class = "slip-img">'+
@@ -194,27 +194,27 @@
                 '<table class = "slip-table">'+
                     '<thead>'+
                         '<tr class="slip-tr" >'+
-                            '<th class="slip-th slip-quantity">ลำดับ</th>'+
-                            '<th class="slip-th slip-description">สินค้า</th>'+
-                            '<th class="slip-th slip-price">ราคา</th>'+
+                            '<th class="slip-th slip-quantity slip-ticket">ลำดับ</th>'+
+                            '<th class="slip-th slip-description slip-ticket">สินค้า</th>'+
+                            '<th class="slip-th slip-price slip-ticket">ราคา</th>'+
                         '</tr>'+
                     '</thead>'+
                     '<tbody>' ;
                     for (let index = 0; index < data_detail_order.products.length; index++) {
                         slip_HTML = slip_HTML + '<tr class="slip-tr">'+
-                            '<td class="slip-td slip-quantity">'+( index + 1 ).toString()+'</td>'+
-                            '<td class="slip-td slip-description">'+data_detail_order.products[index].name +'</td>'+
-                            '<td class="slip-td slip-price">'+data_detail_order.products[index].price +' * '+ data_detail_order.products[index].number +'</td>'+
+                            '<td class="slip-td slip-quantity slip-ticket">'+( index + 1 ).toString()+'</td>'+
+                            '<td class="slip-td slip-description slip-ticket">'+data_detail_order.products[index].name +'</td>'+
+                            '<td class="slip-td slip-price slip-ticket">'+data_detail_order.products[index].price +' * '+ data_detail_order.products[index].number +'</td>'+
                         '</tr>'
                     }
                     slip_HTML = slip_HTML + '</tbody>'+
                 '</table>'+
-                '<p class="slip-centered">ราคารวม : ' + data_detail_order.sum_price + ' บาท' +
-                '<p class="slip-centered">ส่วนลด : ' + data_detail_order.promotion_price + ' บาท' +
-                '<p class="slip-centered">ราคาที่จ่าย : ' + data_detail_order.final_price + ' บาท' +
-                '<p class="slip-centered">เงินที่รับมา : ' + data_detail_order.get_money + ' บาท' +
-                '<p class="slip-centered">เงินทอน : ' + data_detail_order.change_money + ' บาท' +
-                '<p class="slip-centered">ขอบคุณที่ใช้บริการ'+
+                '<p class="slip-centered slip-ticket">ราคารวม : ' + data_detail_order.sum_price + ' บาท' +
+                '<p class="slip-centered slip-ticket">ส่วนลด : ' + data_detail_order.promotion_price + ' บาท' +
+                '<p class="slip-centered slip-ticket">ราคาที่จ่าย : ' + data_detail_order.final_price + ' บาท' +
+                '<p class="slip-centered slip-ticket">เงินที่รับมา : ' + data_detail_order.get_money + ' บาท' +
+                '<p class="slip-centered slip-ticket">เงินทอน : ' + data_detail_order.change_money + ' บาท' +
+                '<p class="slip-centered slip-ticket">ขอบคุณที่ใช้บริการ'+
                 '<br></p>'+
                 '<a id = "bt-submit-final" class="btn btn-primary btn-user btn-block  hidden-print" onclick="printSlip()" ><i class="fas fa-print"></i> พิมพ์ใบเสร็จรับเงิน </a>'+
             '</div>'+
@@ -225,11 +225,13 @@
     }
 
     function printSlip(){
-        w=window.open();
+
+        w = window.open(); ;
         w.document.write(slip_HTML);
         w.print();
-        w.close();
+
     }
     </script>
     
 @endsection
+

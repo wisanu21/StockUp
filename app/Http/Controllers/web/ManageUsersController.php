@@ -49,6 +49,7 @@ class ManageUsersController extends Controller
         $user->is_active =  $request->is_active ;
         $user->level_id =  $request->level_id ;
         $user->save();
+        (new MenuEmployeeController())->addMenuToUser($user->id);
         return redirect('/manage-users');
     }
 
@@ -91,6 +92,7 @@ class ManageUsersController extends Controller
         return $validator;
     }
 
+
     public function delete($id){
         \DB::beginTransaction();
         try {
@@ -105,5 +107,46 @@ class ManageUsersController extends Controller
 
         return redirect('/manage-users')->with('response', [ "status" => "success" , "title" => "ยินดีด้วย" , "detail" => "ลบสินค้าสำเร็จ !" ] ) ;
     
+    }
+
+    public function changePassword(Request $request){
+        $validator = $this->validatorChangePassword($request);
+        if ($validator->errors()->any()) {
+            return [ "status" => "warning" , "title" => "กรุณากรอกข้อมูล!" , "detail" => implode(" , ",$validator->errors()->all()) ] ;
+        }
+        if($request["items"]["new-password"] != $request["items"]["new-password2"]){
+            return [ "status" => "warning" , "title" => "กรุณากรอกข้อมูล!" , "detail" => "รหัสผ่านไม่เหมือนกัน" ] ;
+        }else{
+            \DB::beginTransaction();
+            try {
+                $user = User::where("id",$request->id)->first();
+                $user->password = $request["items"]["new-password"] ;
+                $user->save();
+                
+                \Log::info('changePassword id User : '.$request->id);
+                \DB::commit();
+                return [ "status" => "success" , "title" => "ยินดีด้วย" , "detail" => "เปลี่ยนรหัสผ่านสำเร็จ" ] ;
+            } catch (\Throwable $e) {
+                \DB::rollBack();
+                \Log::info($e->getMessage() ."\n" . $e->getTraceAsString());
+                return [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => $e->getMessage() ."\n" . $e->getTraceAsString() ] ;
+            }
+        }
+        
+    }
+
+    public function validatorChangePassword($request){
+        $validator = Validator::make(
+            $request->all()["items"], [
+            // 'old-password' => 'required',
+            'new-password' => 'required',
+            'new-password2' => 'required',
+        ], [
+            // 'old-password.required' => 'กรุณากรอกรหัสผ่านเดิม',
+            'new-password.required' => 'กรุณากรอกรหัสผ่านใหม่',
+            'new-password2.required' => 'กรุณากรอกยืนยันรหัสผ่านใหม่',
+        ]);
+
+        return $validator ;
     }
 }

@@ -51,7 +51,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a  class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;" onclick="changePassword()" ><i class="fas fa-key"></i></a>
+                                                <a  class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;" onclick="changePassword({{$user->id}})" ><i class="fas fa-key"></i></a>
                                                 <a href="{{url( 'manage-users/edit/'.$user->id )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-edit"></i></a>
                                                 <a class="btn btn-primary btn-primary-blue btn-sm " onclick="Delete({{$user->id}})" style="margin-bottom: 1px;"><i class="fas fa-trash"></i></a>
                                             </td>
@@ -91,28 +91,44 @@
         })
     }
 
-    function changePassword(){
+    function changePassword(id){
         (async () => {
             const { value: formValues } = await Swal.fire({
-            title: 'เปลี่ยนรหัสผ่าน',
-            html:
-                '<input id="old-password" class="swal2-input" type="password" placeholder="รหัสผ่านเดิม" >' +
-                '<input id="new-password" class="swal2-input" type="password" placeholder="รหัสผ่านใหม่">'+
-                '<input id="new-password2" class="swal2-input" type="password" placeholder="ยืนยันรหัสผ่านใหม่">',
-            focusConfirm: false,
-            showCancelButton: true,
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'ยกเลิก',
-            preConfirm: () => {
-                return [
-                document.getElementById('swal-input1').value,
-                document.getElementById('swal-input2').value
-                ]
-            }
+                title: 'เปลี่ยนรหัสผ่าน',
+                html:
+                    // '<input id="old-password" class="swal2-input" type="password" placeholder="รหัสผ่านเดิม" >' +
+                    '<input id="new-password" class="swal2-input" type="password" placeholder="รหัสผ่านใหม่">'+
+                    '<input id="new-password2" class="swal2-input" type="password" placeholder="ยืนยันรหัสผ่านใหม่">',
+                focusConfirm: false,
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'ยกเลิก',
+                preConfirm: () => {
+                    return {
+                        // "old-password" : document.getElementById('old-password').value,
+                        // "id-employee" : id,
+                        "new-password" : document.getElementById('new-password').value,
+                        "new-password2" : document.getElementById('new-password2').value
+                    }
+                }
             })
 
             if (formValues) {
-                Swal.fire(JSON.stringify(formValues))
+                axios.post('/manage-users/change-password', {items: formValues , id : id})
+                .then((response) => {
+                    Swal.fire(
+                        response.data.title,
+                        response.data.detail,
+                        response.data.status
+                    ).then((result) => {
+                        if(response.data.status != "success"){
+                            if (result.isConfirmed) {
+                                changePassword();
+                            }
+                        }
+                    });
+
+                })
             }
         })()
     }
