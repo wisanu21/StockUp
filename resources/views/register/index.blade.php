@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link rel="stylesheet" href="{{asset('css/sb-admin-2.min.css')}}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -50,6 +51,9 @@
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         {!! Form::select('company', $companies, old('company'), ['class'=> 'form-control form-control-user company']) !!}
+                                        <div class="text-right">
+                                            <a class="small" href="{{url('/register-company')}}">ต้องการสร้างร้านค้าหรือไม่ ?</a>
+                                        </div>
                                         {!! showError('company',$errors) !!}
                                     </div>
                                 </div>
@@ -79,6 +83,7 @@
                                 </div>
                                 {!! showError('field',$errors) !!}
                                 <input type="submit"  class="btn btn-primary btn-user btn-block" value="บันทึก">
+                                <a class="btn btn-secondary btn-user btn-block  " href="{{url('')}}" >ย้อนกลับ </a>
                             {!! Form::close() !!}
                         </div>
                     </div>
@@ -102,7 +107,16 @@
     // $("select [value='']").attr("selected", "selected");
     $("select [value='']").attr("disabled", "disabled");
     </script>
-
+    @if (session('response'))
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.js"></script>
+        <script>
+            Swal.fire(
+                "{{ session('response')['title'] }}",
+                "{{ session('response')['detail'] }}",
+                "{{ session('response')['status'] }}"
+            )
+        </script>
+    @endif
 </body>
 
 </html>

@@ -21,6 +21,8 @@ Route::post('/login', 'web\LoginController@login');
 
 Route::get('/register', 'web\RegisterController@index');
 Route::post('/register', 'web\RegisterController@register');
+Route::get('/register-company', 'web\RegisterCompanyController@index');
+Route::post("/register-company-save","web\RegisterCompanyController@registerCompanySave");
 Route::group(['middleware'=>'auth.check'], function(){
     Route::post('/login-restricted-area', 'web\LoginController@loginRestrictedArea');
     Route::get('/home', 'web\HomeController@index');
@@ -36,6 +38,18 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::post("/change-password","web\ManageUsersController@changePassword");
     });
 
+    Route::group(['prefix' => 'manage-company'], function () {
+        Route::get('/', 'web\ManageCompanyController@list');
+        Route::get('/edit-company/{id}', 'web\ManageCompanyController@editCompany');
+        Route::post("/edit-company-save","web\ManageCompanyController@editCompanySave");
+        // Route::get("/add","web\ProductController@add");
+        // Route::post("/add-save","web\ProductController@addSave");
+        // Route::get("/edit/{id}","web\ManageUsersController@edit");
+        // Route::post("/edit-save","web\ManageUsersController@editSave");
+        Route::get("/delete/{id}","web\ManageCompanyController@delete");
+        // Route::post("/change-password","web\ManageUsersController@changePassword");
+    });
+
     Route::group(['prefix' => 'product'], function () {
         Route::get('/', 'web\ProductController@list');
         Route::get("/add","web\ProductController@add");
@@ -44,6 +58,17 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::get("/edit/{id}","web\ProductController@edit");
         Route::post("/edit-save","web\ProductController@editSave");
         Route::get("/delete/{id}","web\ProductController@delete");
+    });
+    
+    Route::group(['prefix' => 'company'], function () {
+        Route::get('/', 'web\CompanyController@index');
+        Route::post("/save","web\CompanyController@save");
+        // Route::get("/add","web\ProductController@add");
+        // Route::post("/add-save","web\ProductController@addSave");
+        // Route::get("/detail/{id}","web\ProductController@detail");
+        // Route::get("/edit/{id}","web\ProductController@edit");
+        // Route::post("/edit-save","web\ProductController@editSave");
+        // Route::get("/delete/{id}","web\ProductController@delete");
     });
 
     Route::group(['prefix' => 'promotion'], function () {

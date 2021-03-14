@@ -52,7 +52,7 @@ class MenuEmployeeController extends Controller
     }
 
     function addMenuShopkeeper($user_id){
-        foreach (Menu::where("id","!=",1)->get() as $key => $menu) {
+        foreach (Menu::where("id","!=",1)->where("id","!=",9)->get() as $key => $menu) {
             $menu_employee = new MenuEmployee() ;
             $menu_employee->employee_id = $user_id ;
             $menu_employee->menu_id = $menu->id ;

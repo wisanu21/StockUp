@@ -105,7 +105,7 @@ class ManageUsersController extends Controller
             return redirect('/manage-users')->with('response', [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => $e->getMessage() ."\n" . $e->getTraceAsString() ] ) ;
         }
 
-        return redirect('/manage-users')->with('response', [ "status" => "success" , "title" => "ยินดีด้วย" , "detail" => "ลบสินค้าสำเร็จ !" ] ) ;
+        return redirect('/manage-users')->with('response', [ "status" => "success" , "title" => "ยินดีด้วย" , "detail" => "ลบ User สำเร็จ !" ] ) ;
     
     }
 

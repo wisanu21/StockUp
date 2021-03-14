@@ -53,7 +53,7 @@
                                                                 {{$product->name}}</div>
                                                             <div class="h6 mb-0 font-weight-bold " style="opacity: 0.75;">{{$product->price}}  บาท</div>
                                                             @if( $product->is_stock != "0" && $product->Stock != null  )
-                                                                <div class="h6 mb-0 font-weight-bold " style="opacity: 0.55;">สินค้าในสต๊อก : {{$product->Stock->number}}  ชิ้น</div>
+                                                                <div class="h6 mb-0 font-weight-bold product-stock-number-{{$product->id}}" number_product = "{{$product->Stock->number}}" style="opacity: 0.55;">สินค้าในสต๊อก : {{$product->Stock->number}}  ชิ้น</div>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -101,19 +101,37 @@
     }
     
     function setListProductsByLocalStorage(){
-        // console.log(JSON.parse(localStorage.getItem('list_products')));
-        if( JSON.parse(localStorage.getItem('list_products')) == null ){
-            localStorage.setItem('list_products', JSON.stringify(list_products));
+        console.log(localStorage.getItem('list_products'));
+        if( localStorage.getItem('list_products') == '' ){
+            localStorage.setItem('list_products', '[]');
         } 
         list_products = JSON.parse(localStorage.getItem('list_products'));
     }
 
     function addProduct(product_id , product_name , product_price , product_image_path){
-        var index_list_products = findProductOnListProducts(product_id) ;
-        if(index_list_products == null){
-            list_products[ list_products.length ] = {"id":product_id , "number": 1 , "name" : product_name , "price" : product_price , "image_path" : product_image_path } ;
+
+        // console.log( $(".product-stock-number-"+product_id) );
+        var number_product = "unlimit" ;
+        if(  $(".product-stock-number-"+product_id).length == 1 && (findProductOnListProducts(product_id) != null  || $(".product-stock-number-"+product_id).attr("number_product") == 0)){
+            if($(".product-stock-number-"+product_id).attr("number_product") < list_products[findProductOnListProducts(product_id)].number + 1 ){
+                // number_product = $(".product-stock-number-"+product_id).attr("number_product");
+                number_product = "0" ;
+            }
+        }
+
+        if(number_product == "unlimit"){
+            var index_list_products = findProductOnListProducts(product_id) ;
+            if(index_list_products == null){
+                list_products[ list_products.length ] = {"id":product_id , "number": 1 , "name" : product_name , "price" : product_price , "image_path" : product_image_path } ;
+            }else{
+                list_products[index_list_products].number = list_products[index_list_products].number + 1 ;
+            }
         }else{
-            list_products[index_list_products].number = list_products[index_list_products].number + 1 ;
+            Swal.fire(
+                "ขออภัย",
+                "สินค้าไม่พอ",
+                "warning"
+            )
         }
 
         setLocalStorageByListProducts();
@@ -136,13 +154,13 @@
             
             HTML_box_list_product = HTML_box_list_product +
             '<nav class="navbar navbar-expand navbar-light bg-light mb-4 box_list_product">'
-                                        +'<div>'+list_products[index].name+'</div>'
-                                        +'<div class="navbar-nav ml-auto">'
-                                            +'<a  onclick="updateProduct('+ list_products[index].id +' ,'+"'+'"+')" class="btn btn-primary btn-primary-blue btn-sm" style="margin-right: 1px;"><i class="fas fa-plus"></i></a>'
-                                            +'<input id = "product-id-'+ list_products[index].id +'" value = '+ list_products[index].number +' product-id = "'+ list_products[index].id +'" type="text" name="product-id-'+ list_products[index].id +'" style="width: 50px;" readonly />'
-                                            +'<a  onclick="updateProduct('+ list_products[index].id +' ,'+"'-'"+')" class="btn btn-primary btn-primary-blue btn-sm" style="margin-left: 1px;"><i class="fas fa-minus"></i></a>'
-                                        +'</div>'
-                                    +'</nav> ' ;
+                +'<div>'+list_products[index].name+'</div>'
+                +'<div class="navbar-nav ml-auto">'
+                    +'<a  onclick="updateProduct('+ list_products[index].id +' ,'+"'+'"+')" class="btn btn-primary btn-primary-blue btn-sm" style="margin-right: 1px;"><i class="fas fa-plus"></i></a>'
+                    +'<input id = "product-id-'+ list_products[index].id +'" value = '+ list_products[index].number +' product-id = "'+ list_products[index].id +'" type="text" name="product-id-'+ list_products[index].id +'" style="width: 50px;" readonly />'
+                    +'<a  onclick="updateProduct('+ list_products[index].id +' ,'+"'-'"+')" class="btn btn-primary btn-primary-blue btn-sm" style="margin-left: 1px;"><i class="fas fa-minus"></i></a>'
+                +'</div>'
+            +'</nav> ' ;
             
         }
 

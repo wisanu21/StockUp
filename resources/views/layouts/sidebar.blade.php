@@ -19,7 +19,7 @@
 </li> -->
 
 @foreach (\Auth::user()->menu_employees as $menu_employee)
-    @if($menu_employee->Menu != null && $menu_employee->Menu->id != 1 )
+    @if($menu_employee->Menu != null && ($menu_employee->Menu->id != 1 && $menu_employee->Menu->id != 9 ) )
     <li class="nav-item {{\Request::is([$menu_employee->Menu->header_url])?'active':''}}">
         
         <a class="nav-link" href="{{url('/'.$menu_employee->Menu->header_url)}}">
@@ -28,17 +28,17 @@
         </a>
     </li>
     @endif
-    @if($menu_employee->Menu != null && \Auth::user()->Level->id == 1 && $menu_employee->Menu->id == 1 )
+    @if($menu_employee->Menu != null && \Auth::user()->Level->id == 1 && ($menu_employee->Menu->id == 1 || $menu_employee->Menu->id == 9 ) )
     <li class="nav-item {{\Request::is([$menu_employee->Menu->header_url])?'active':''}}">
         
-        <a class="nav-link" id = "bt-admin" onclick="confirmAdmin()">
+        <a class="nav-link" id = "bt-admin" onclick="confirmAdmin('{{$menu_employee->Menu->id}}')">
             {!! $menu_employee->Menu->html_icon !!}
             <span>{{$menu_employee->Menu->name}}</span>
         </a>
     </li>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
-        function confirmAdmin(){
+        function confirmAdmin(menu_id){
             (async () => {
                 const { value: password } = await Swal.fire({
                     title: 'เขตหวงห้าม!',
@@ -53,7 +53,7 @@
                     cancelButtonText: 'ยกเลิก'
                 })
                 if (password) {
-                    var data_form = { "user_id" : "{{\Auth::user()->id}}" , "password" : `${password}` } ;
+                    var data_form = { "user_id" : "{{\Auth::user()->id}}" , "password" : `${password}`, "menu_id" : menu_id } ;
                     axios.post('/login-restricted-area', {data: data_form})
                     .then((response) => {
                         response.data.status

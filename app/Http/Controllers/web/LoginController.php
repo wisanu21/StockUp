@@ -10,6 +10,7 @@ use Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Menu;
 
 class LoginController extends Controller
 {
@@ -73,10 +74,15 @@ class LoginController extends Controller
 
     public function loginRestrictedArea(Request $request){
         \DB::beginTransaction();
+        \Log::info('loginRestrictedArea user id is '.Auth::user()->id ,$request->input());
         try {
             if(isset($request->data["user_id"]) && isset($request->data["password"])){
                 if(Employee::where("id",$request->data["user_id"])->where("password",$request->data["password"])->first() != null){
-                    return  [ "status" => "success" , "url" => url("/manage-users") ] ; 
+                    $menu = Menu::where("id",$request->data["menu_id"])->first();
+                    if($menu !=null){
+                        // return  [ "status" => "success" , "url" => url("/manage-users") ] ; 
+                        return  [ "status" => "success" , "url" => url($menu->header_url) ] ; 
+                    }
                 }else{
                     return  [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => "ไม่ได้แดกกูหรอก" ] ; 
                 }
@@ -84,7 +90,7 @@ class LoginController extends Controller
             }else{
                 return  [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => "ไม่ได้แดกกูหรอก" ] ; 
             }
-            \Log::info('register Employee ',$request->input());
+            // \Log::info('loginRestrictedArea user id is '.Auth::user()->id ,$request->input());
             \DB::commit();
         } catch (\Throwable $e) {
             \DB::rollBack();
