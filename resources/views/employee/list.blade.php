@@ -1,9 +1,9 @@
 @extends('layout.app')
 @section('content')
 
-<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
-<link href="https://cdn.datatables.net/rowreorder/1.2.7/css/rowReorder.dataTables.min.css" rel="stylesheet" type="text/css">
-<link href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.datatables.net/rowreorder/1.2.7/css/rowReorder.dataTables.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css">
     <div class="container">
         <div class = "row justify-content-center">
             <div class="col-xl-12 col-lg-12 col-sm-12">
@@ -31,31 +31,31 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
+                                    @foreach ($employees as $employee)
                                         <tr>
-                                            <td>{{$user->first_name}}</td>
-                                            <td>{{$user->last_name}}</td>
-                                            <td>{{$user->easy_name}}</td>
-                                            <td>{{$user->mobile}}</td>
-                                            <td>{{$user->Company->name}}</td>
+                                            <td>{{$employee->first_name}}</td>
+                                            <td>{{$employee->last_name}}</td>
+                                            <td>{{$employee->easy_name}}</td>
+                                            <td>{{$employee->mobile}}</td>
+                                            <td>{{$employee->Company->name}}</td>
                                             <td>
-                                                @if($user->is_active == 1)
+                                                @if($employee->is_active == 1)
                                                     เปิดใช้งาน
                                                 @else
                                                     ปิดใช้งาน
                                                 @endif    
                                             </td>
                                             <td>
-                                                @if($user->is_active == 1)
-                                                    {{$user->Level->name}}
+                                                @if($employee->is_active == 1)
+                                                    {{$employee->Level->name}}
                                                 @else
                                                     -
                                                 @endif
                                             </td>
                                             <td>
-                                                <a  class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;" onclick="changePassword({{$user->id}})" ><i class="fas fa-key"></i></a>
-                                                <a href="{{url( 'manage-users/edit/'.$user->id )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-edit"></i></a>
-                                                <a class="btn btn-primary btn-primary-blue btn-sm " onclick="Delete({{$user->id}})" style="margin-bottom: 1px;"><i class="fas fa-trash"></i></a>
+                                                <a  class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;" onclick="changePassword({{$employee->id}})" ><i class="fas fa-key"></i></a>
+                                                <a href="{{url( 'employee/edit/'.$employee->id )}}" class="btn btn-primary btn-primary-blue btn-sm" style="margin-bottom: 1px;"><i class="fas fa-edit"></i></a>
+                                                <a class="btn btn-primary btn-primary-blue btn-sm " onclick="Delete({{$employee->id}})" style="margin-bottom: 1px;"><i class="fas fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -70,7 +70,7 @@
     
 @endsection
 @section('script')
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
@@ -96,7 +96,7 @@
             cancelButtonText: 'ยกเลิก'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.replace("{{url( 'manage-users/delete/')}}"+"/"+id);
+                window.location.replace("{{url('employee/delete/')}}"+"/"+id);
             }   
         })
     }
@@ -124,7 +124,7 @@
             })
 
             if (formValues) {
-                axios.post('/manage-users/change-password', {items: formValues , id : id})
+                axios.post('/employee/change-password', {items: formValues , id : id})
                 .then((response) => {
                     Swal.fire(
                         response.data.title,

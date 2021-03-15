@@ -1,7 +1,9 @@
 @extends('layout.app')
 @section('content')
 
-    <link href="//cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.datatables.net/rowreorder/1.2.7/css/rowReorder.dataTables.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css">
     <div class="container">
         <div class = "row justify-content-center">
             <div class="col-xl-10 col-lg-10 col-sm-12">
@@ -14,8 +16,8 @@
                             <a href="{{url('/manage-stock/add')}}" ><i class="fas fa-plus"></i> เพิ่มของในสต๊อก</a>
                         </div>
 
-                        <div class="text-center table-responsive">
-                            <table class="table table-bordered" id="table-list">
+                        <div class="table-responsive">
+                            <table class="display nowrap" style="width:100%" id="table-list">
                                 <thead class="thead-light">
                                 <tr>
                                     <th></th>
@@ -67,10 +69,18 @@
     
 @endsection
 @section('script')
-    <script src="//cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript">
     $(document).ready( function () {
-        $('#table-list').DataTable();
+
+        $('#table-list').DataTable({
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            responsive: true
+        });
     } );
     function Delete(id) {
         // alert( "Handler for .click() called." );

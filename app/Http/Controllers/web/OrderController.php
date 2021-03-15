@@ -24,10 +24,17 @@ class OrderController extends Controller
     }
 
     public function createOrder($promotion_id){
-        // dd();
-        // dd($promotion_id);
         if($promotion_id != "null"){
-            $promotion = Promotion::where("id" , $promotion_id )->where("is_active_promotion",1)->first();
+           
+            if(str_contains($promotion_id, "discount")){    // discount
+                $promotion["price_or_percentage"] = "price" ;
+                $promotion["resource"] = substr($promotion_id,8);
+                $promotion["name"] = "ส่วนลดพิเศษ" ;
+                $promotion["id"] = $promotion_id;
+            }else{
+                $promotion = Promotion::where("id" , $promotion_id )->where("is_active_promotion",1)->first();
+            }
+            
         }else{
             $promotion = null ;
         }
@@ -35,25 +42,40 @@ class OrderController extends Controller
     }
 
     public function submitOrder(Request $request){
+        // dd($request->all());
         if($request->items){
             $sum_price = 0 ; 
             foreach ($request->items["products"] as $key => $product) {
                 $sum_price = $sum_price + ( $product["price"] * $product["number"] ) ;
             }
-            $promotion = Promotion::where("id" , $request->items["promotion_id"] )->where("is_active_promotion",1)->first();
-            $num_promotion = 0; 
-            if($promotion != null){
-                if($promotion->price_or_percentage == "price"){
-                    $num_promotion = $promotion->resource ;
-                }
-                if($promotion->price_or_percentage == "percentage"){
-                    $num_promotion = ( $sum_price / 100 ) * $promotion->resource ;
+            if($request->items["promotion_id"] != null){
+                if(str_contains($request->items["promotion_id"], "discount")){  // discount
+                    $promotion["price_or_percentage"] = "price" ;
+                    $promotion["resource"] = floatval(substr($request->items["promotion_id"],8));
+                    $promotion["name"] = "ส่วนลดพิเศษ" ;
+                }else{
+                    $promotion = Promotion::where("id" , $request->items["promotion_id"] )->where("is_active_promotion",1)->first();
                 }
             }
 
-            $final_price = $sum_price - $num_promotion ;
+            $num_promotion = 0; 
+            if($request->items["promotion_id"] != null){
+                if($promotion["price_or_percentage"] == "price"){
+                    $num_promotion = $promotion["resource"] ;
+                }
+                if($promotion["price_or_percentage"] == "percentage"){
+                    $num_promotion = ( $sum_price / 100 ) * $promotion["resource"] ;
+                }
+            }
+            
+            if($num_promotion > $sum_price){
+                $final_price = 0 ;
+            }else{
+                $final_price = $sum_price - $num_promotion ;
+            }
+            // dd($request->items , $final_price == $request->items["final_price"] );
             $final_price = number_format($final_price, 2, '.', '');
-            // dd(( $final_price + 1 > $request->items["final_price"] && $final_price - 1 < $request->items["final_price"] ));
+            // dd( $request->items,$final_price);
             if($final_price == $request->items["final_price"] || ( $final_price + 1 > $request->items["final_price"] && $final_price - 1 < $request->items["final_price"] ) ){
                 $save_order = ($this->saveOrder($request ,$sum_price ,$num_promotion)) ; 
                 if($save_order["status"] == "success"){
@@ -80,7 +102,14 @@ class OrderController extends Controller
             $order->change_money = $request->items["change_money"] ;
             $order->company_id = Auth::user()->company_id ;
             $order->adder_id = Auth::user()->id ;
-            $order->promotion_id = $request->items["promotion_id"] ;
+            if($request->items["promotion_id"] != null){
+                if(str_contains($request->items["promotion_id"], "discount")){  // discount
+                    $order->promotion_id = null ;
+                }else{
+                    $order->promotion_id = $request->items["promotion_id"] ;
+                }
+            }
+            
             $order->save();
             \Log::info('saveOrder '.$order->id);
             foreach ($request->items["products"] as $key => $product) {

@@ -113,7 +113,7 @@
         // console.log( $(".product-stock-number-"+product_id) );
         var number_product = "unlimit" ;
         if(  $(".product-stock-number-"+product_id).length == 1 && (findProductOnListProducts(product_id) != null  || $(".product-stock-number-"+product_id).attr("number_product") == 0)){
-            if($(".product-stock-number-"+product_id).attr("number_product") < list_products[findProductOnListProducts(product_id)].number + 1 ){
+            if($(".product-stock-number-"+product_id).attr("number_product") == 0 || $(".product-stock-number-"+product_id).attr("number_product") < list_products[findProductOnListProducts(product_id)].number + 1 ){
                 // number_product = $(".product-stock-number-"+product_id).attr("number_product");
                 number_product = "0" ;
             }
@@ -165,10 +165,11 @@
         }
 
         if(list_products.length != 0){
-            HTML_box_list_product = HTML_box_list_product + '<select onchange="showPromotionOrCode()" id="select_st_promotion" class = "form-control form-control-user box_list_product" style="margin-bottom: 5px;">'
+            HTML_box_list_product = HTML_box_list_product + '<select onchange="showPromotionOrCodeOrDiscount()" id="select_st_promotion" class = "form-control form-control-user box_list_product" style="margin-bottom: 5px;">'
                 +'<option value="">ไม่มีโปรโมชั่น</option>'
                 +'<option value="is have promotion">มีโปรโมชั่น</option>'
                 +'<option value="is have code">มีโค้ดส่วนลด</option>'
+                +'<option value="is have discount">ส่วนลดพิเศษ</option>'
             +'</select>'
             +'<div class = "div-show-promotion-or-code box_list_product"> </div>'
             // var sum_price = exampleCalculateSumPrice()
@@ -178,7 +179,7 @@
         // $(".box_list_product").remove();
         $('#card-list-product').html(HTML_box_list_product);
         $("#select_st_promotion").val(select_st_promotion)
-        showPromotionOrCode();
+        showPromotionOrCodeOrDiscount();
         
     }
 
@@ -225,11 +226,18 @@
 
     function submit_order_list(){
         setLocalStorageByListProducts()
+        setPromotion_idIfIsHaveDiscount();
         // localStorage.setItem('promotion', JSON.stringify(list_products));
         window.location.href = "{{url('order/create-order/')}}"+"/"+promotion_id;
     }
 
-    function showPromotionOrCode(){
+    function setPromotion_idIfIsHaveDiscount(){
+        if(select_st_promotion == "is have discount"){
+            promotion_id = "discount" + $("#discount").val();
+        }
+    }
+
+    function showPromotionOrCodeOrDiscount(){
         $('.div-show-promotion-or-code').html("");
         select_st_promotion = $("#select_st_promotion").val();
         HTML_promotion_or_code = "" ;
@@ -249,6 +257,12 @@
             HTML_promotion_or_code = '<a onclick="calCode()" id = "bt-cal-code"class="btn btn-primary btn-primary-blue " style="float: right"><i id = "icon_cal_code" class="fas fa-bolt"></i></a>'+
             '<div style="overflow: hidden; padding-right: .5em;">'+
                 '<input type="text" id = "code" class="form-control form-control-user"placeholder="โค้ด..."style="margin-bottom: 5px;" >'+
+            '</div>'
+        }
+
+        if(select_st_promotion == "is have discount" ){
+            HTML_promotion_or_code = '<div style="overflow: hidden; padding-right: .5em;">'+
+                '<input type="number" id = "discount" class="form-control form-control-user"placeholder="จำนวนเงินที่ต้องการลดราคา..."style="margin-bottom: 5px;" >'+
             '</div>'
         }
         $('.div-show-promotion-or-code').html(HTML_promotion_or_code);

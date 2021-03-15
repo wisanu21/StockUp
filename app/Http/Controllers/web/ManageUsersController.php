@@ -40,17 +40,27 @@ class ManageUsersController extends Controller
                     ->withInput();
             }
         }
+        \DB::beginTransaction();
+        try {
 
-        $user = User::where("id",$request->id)->first();
-        $user->first_name =  $request->first_name ;
-        $user->last_name =  $request->last_name ;
-        $user->easy_name =  $request->easy_name ;
-        $user->mobile =  $request->mobile ;
-        $user->is_active =  $request->is_active ;
-        $user->level_id =  $request->level_id ;
-        $user->save();
-        (new MenuEmployeeController())->addMenuToUser($user->id);
-        return redirect('/manage-users');
+            $user = User::where("id",$request->id)->first();
+            $user->first_name =  $request->first_name ;
+            $user->last_name =  $request->last_name ;
+            $user->easy_name =  $request->easy_name ;
+            $user->mobile =  $request->mobile ;
+            $user->is_active =  $request->is_active ;
+            $user->level_id =  $request->level_id ;
+            $user->save();
+            (new MenuEmployeeController())->addMenuToUser($user->id);
+
+            \Log::info('ManageUsersController editSave id User : '.$user->id);
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            \Log::info($e->getMessage() ."\n" . $e->getTraceAsString());
+            return redirect('/manage-users')->with('response', [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => $e->getMessage() ."\n" . $e->getTraceAsString() ] ) ;
+        }
+        return redirect('/manage-users')->with('response', [ "status" => "success" , "title" => "ยินดีด้วย" , "detail" => "แก้ไขข้อมูลสำเร็จ !" ] ) ;
     }
 
     function validatorEditSave($request){

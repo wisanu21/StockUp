@@ -30,8 +30,6 @@ Route::group(['middleware'=>'auth.check'], function(){
 
     Route::group(['prefix' => 'manage-users'], function () {
         Route::get('/', 'web\ManageUsersController@list');
-        // Route::get("/add","web\ProductController@add");
-        // Route::post("/add-save","web\ProductController@addSave");
         Route::get("/edit/{id}","web\ManageUsersController@edit");
         Route::post("/edit-save","web\ManageUsersController@editSave");
         Route::get("/delete/{id}","web\ManageUsersController@delete");
@@ -42,12 +40,15 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::get('/', 'web\ManageCompanyController@list');
         Route::get('/edit-company/{id}', 'web\ManageCompanyController@editCompany');
         Route::post("/edit-company-save","web\ManageCompanyController@editCompanySave");
-        // Route::get("/add","web\ProductController@add");
-        // Route::post("/add-save","web\ProductController@addSave");
-        // Route::get("/edit/{id}","web\ManageUsersController@edit");
-        // Route::post("/edit-save","web\ManageUsersController@editSave");
         Route::get("/delete/{id}","web\ManageCompanyController@delete");
-        // Route::post("/change-password","web\ManageUsersController@changePassword");
+    });
+
+    Route::group(['prefix' => 'employee'], function () {
+        Route::get('/', 'web\EmployeeController@list');
+        Route::get("/edit/{id}","web\EmployeeController@edit");
+        Route::post("/edit-save","web\EmployeeController@editSave");
+        Route::get("/delete/{id}","web\EmployeeController@delete");
+        Route::post("/change-password","web\EmployeeController@changePassword");
     });
 
     Route::group(['prefix' => 'product'], function () {

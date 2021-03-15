@@ -96,31 +96,34 @@
 
         var num_promotion = 0 ;
         var str_resource = "" ;
-
+        console
         @if($promotion != null)
             HTML_in_tbody = HTML_in_tbody + '<tr>' 
                 +'<td colspan="3"></td>'
                 +'<td><strong>รวม</strong></td>'
                 +'<td>'+sum_price+'</td>'
             +'</tr>'
-            if("{{$promotion->price_or_percentage}}" ==  "price"){
-                num_promotion = parseFloat("{{$promotion->resource}}");
-                str_resource = "{{$promotion->resource}} บาท" ;
+            if("{{$promotion['price_or_percentage']}}" ==  "price"){
+                num_promotion = parseFloat("{{$promotion['resource']}}");
+                str_resource = "{{$promotion['resource']}} บาท" ;
             }else{
-                num_promotion =  ( sum_price / 100 ) * parseFloat("{{$promotion->resource}}") ;
-                str_resource = "{{$promotion->resource}} %" ;
+                num_promotion =  ( sum_price / 100 ) * parseFloat("{{$promotion['resource']}}") ;
+                str_resource = "{{$promotion['resource']}} %" ;
             }
             HTML_in_tbody = HTML_in_tbody + '<tr>' 
                 +'<td colspan="2"></td>'
-                +'<td colspan="2"><strong>ส่วนลด ( '+"{{$promotion->name}}"+' ลดทันที '+str_resource+' )</strong></td>'
+                +'<td colspan="2"><strong>ส่วนลด ( '+"{{$promotion['name']}}"+' ลดทันที '+str_resource+' )</strong></td>'
                 +'<td> - '+num_promotion+'</td>'
             +'</tr>'
         @endif
         final_price = (sum_price - num_promotion).toFixed(2) ;
+        if(final_price < 0){
+            final_price = 0 ;
+        }
         HTML_in_tbody = HTML_in_tbody + '<tr>' 
             +'<td colspan="3"></td>'
             +'<td><strong>ราคาที่ต้องจ่าย</strong></td>'
-            +'<td>'+ (sum_price - num_promotion).toFixed(2) +'</td>'
+            +'<td>'+ final_price +'</td>'
         +'</tr>'
 
         $('tbody').html(HTML_in_tbody);
@@ -161,7 +164,8 @@
     function submitOrder(){
         var promotion_id = null ;
         @if($promotion != null)
-            promotion_id = parseInt("{{$promotion->id}}");
+            // promotion_id = parseInt("{{$promotion['id']}}");
+            promotion_id = "{{$promotion['id']}}"
         @endif
         var list_products = JSON.parse(localStorage.getItem('list_products'));
         var data_form = { "products" : list_products , "promotion_id" : promotion_id , "final_price" :parseFloat(final_price).toFixed(2) , "get_money" : parseFloat(get_money).toFixed(2) , "change_money" : change_money.toFixed(2)}
