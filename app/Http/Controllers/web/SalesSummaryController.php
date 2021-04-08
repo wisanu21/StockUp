@@ -30,6 +30,8 @@ class SalesSummaryController extends Controller
                 $arr_days[ $this_day ] = Order::where("company_id", Auth::user()->company_id )->whereDate('created_at', '=', $this_day)->orderBy('id', 'ASC')->get();
                 $add_day++;
             }
+        }else{
+            return back()->with('response', [ "status" => "error" , "title" => "เกิดข้อผิดพลาด" , "detail" => "ไม่พบยอดขาย" ] ) ;
         }
 
         $menu = Menu::where("id",10)->first();
