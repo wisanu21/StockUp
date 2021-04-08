@@ -15,6 +15,8 @@ class LoginController extends Controller
     public function loginByDeviceID(Request $request){
         $device = Device::where('os',$request->os)->where('identifier',$request->identifier)->first();
         if( $device ){
+
+            \DB::beginTransaction();
             try {
                 $device->token = Str::random(25) ;
                 $device->save();
@@ -39,6 +41,8 @@ class LoginController extends Controller
                             ->where('is_active',1)
                             ->first();
         if($employee){
+
+            \DB::beginTransaction();
             try {
                 // Device::where('employee_id',$employee->id)->delete();
                 $device = new Device() ;
@@ -65,6 +69,8 @@ class LoginController extends Controller
 
     public function Logout(Request $request){
         $device = Device::where('os',$request->os)->where('identifier',$request->identifier)->first();
+
+        \DB::beginTransaction();
         try {
             if($device){
                 \Log::info('delete Device employee_id :'.$device->employee_id.' $device id :'.$device->identifier);

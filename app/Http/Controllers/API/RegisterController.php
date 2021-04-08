@@ -22,6 +22,7 @@ class RegisterController extends Controller
             $is_active = false ;
         }
 
+        \DB::beginTransaction();
         try {
             $employee = new Employee();
             $employee->first_name = $request->text_fname ;
@@ -59,6 +60,7 @@ class RegisterController extends Controller
                 $menus = Menu::where('is_active',1)->get();
                 if($menus != []){
                     foreach ($menus as $key => $menu) {
+                        \DB::beginTransaction();
                         try {
                             $menu_employees = new MenuEmployee() ;
                             $menu_employees->employee_id = $employee->id ;

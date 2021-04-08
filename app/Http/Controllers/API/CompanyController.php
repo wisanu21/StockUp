@@ -32,6 +32,7 @@ class CompanyController extends Controller
             $is_active = false ;
         }
 
+        \DB::beginTransaction();
         try {
             $employee = new Employee();
             $employee->first_name = $request->text_fname ;

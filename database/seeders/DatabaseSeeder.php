@@ -15,9 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-            LevelSeeder::class,
+            // LevelSeeder::class,
             MenuSeeder::class,
-            CompanySeeder::class,
+            // CompanySeeder::class,
             AdminSeeder::class,
             // CommentSeeder::class,
         ]);
