@@ -106,5 +106,9 @@ Route::group(['middleware'=>'auth.check'], function(){
         Route::post('/index-post', 'web\SalesSummaryController@index');
         Route::get('/detail/{id}', 'web\SalesSummaryController@detail');
     });
-
+    
+    Route::get('generate', function (){
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        echo 'ok';
+    });
 });

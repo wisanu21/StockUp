@@ -52,7 +52,7 @@ class MenuEmployeeController extends Controller
     }
 
     function addMenuShopkeeper($user_id){
-        foreach (Menu::where("id","!=",1)->where("id","!=",9)->get() as $key => $menu) {
+        foreach (Menu::whereIn('id', [2, 3, 4, 5, 6, 7, 8, 10])->get() as $key => $menu) {
             $menu_employee = new MenuEmployee() ;
             $menu_employee->employee_id = $user_id ;
             $menu_employee->menu_id = $menu->id ;
@@ -61,7 +61,7 @@ class MenuEmployeeController extends Controller
     }
 
     function addMenuHeadOfEmployee($user_id){
-        foreach (Menu::whereIn('id', [4, 5, 6, 7, 8])->get() as $key => $menu) {
+        foreach (Menu::whereIn('id', [2, 4, 5, 6, 7, 8, 10])->get() as $key => $menu) {
             $menu_employee = new MenuEmployee() ;
             $menu_employee->employee_id = $user_id ;
             $menu_employee->menu_id = $menu->id ;
@@ -70,7 +70,7 @@ class MenuEmployeeController extends Controller
     }
 
     function addMenuEmployee($user_id){
-        foreach (Menu::whereIn('id', [4, 5, 7, 8])->get() as $key => $menu) {
+        foreach (Menu::whereIn('id', [ 4, 5, 7, 8])->get() as $key => $menu) {
             $menu_employee = new MenuEmployee() ;
             $menu_employee->employee_id = $user_id ;
             $menu_employee->menu_id = $menu->id ;

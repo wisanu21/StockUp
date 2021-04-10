@@ -10,7 +10,11 @@ trait HasEmployeeAttribute {
     use SoftDeletes;
     public function getMenuEmployeesAttribute()
     {
-        return MenuEmployee::where("employee_id", $this->id)->get();
+        return MenuEmployee::where("employee_id", $this->id)
+                            ->leftJoin('menus', 'menus.id', '=', 'menu_employees.menu_id')
+                            ->orderBy('menus.list_no', 'ASC')
+                            ->select("menu_employees.*")
+                            ->get();
     }
 
     public function getFullNameAttribute()

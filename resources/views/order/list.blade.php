@@ -150,6 +150,9 @@
 
     function showListProducts(){
         var HTML_box_list_product = "";
+        if(list_products == null){
+            list_products = [] ;
+        }
         for (let index = 0; index < list_products.length; index++) {
             
             HTML_box_list_product = HTML_box_list_product +
